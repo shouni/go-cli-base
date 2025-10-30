@@ -24,9 +24,10 @@ type CustomPreRunEFunc func(cmd *cobra.Command, args []string) error
 
 // NewRootCmd は、指定されたアプリケーション名に基づいてルートコマンドの基盤を生成します。
 // アプリケーション固有のフラグ追加や、PersistentPreRunE のロジックを注入できます。
+//
+// 注意: Short, Longなどのユーザーに見える文字列には、全角スペース・U+00A0を含めないでください。
 func NewRootCmd(appName string, addFlags CustomFlagFunc, preRunE CustomPreRunEFunc) *cobra.Command {
 	rootCmd := &cobra.Command{
-		// コロン(:)の前後も含め、全角スペース・U+00A0を排除
 		Use:   appName,
 		Short: fmt.Sprintf("A CLI tool for %s.", appName),
 		Long:  fmt.Sprintf("The CLI tool for %s. Use a subcommand to perform a task.", appName),
@@ -46,7 +47,7 @@ func NewRootCmd(appName string, addFlags CustomFlagFunc, preRunE CustomPreRunEFu
 			}
 			return nil
 		},
-		// コロン(:)の前後も含め、全角スペース・U+00A0を排除
+		// Run は通常、Help表示などに利用されます
 		Run: func(cmd *cobra.Command, args []string) {
 			cmd.Help()
 		},
@@ -71,7 +72,7 @@ func Execute(appName string, addFlags CustomFlagFunc, preRunE CustomPreRunEFunc,
 	rootCmd.AddCommand(cmds...)
 
 	if err := rootCmd.Execute(); err != nil {
-		// cobraがエラーを出力するため、os.Exit(1)のみ
+		// cobraがエラーメッセージを標準エラー出力に表示するため、ここではos.Exit(1)のみで十分です。
 		os.Exit(1)
 	}
 }
