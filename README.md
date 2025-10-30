@@ -121,13 +121,13 @@ type CustomPreRunEFunc func(cmd *cobra.Command, args []string) error
 
 アプリケーション名、**カスタムフラグ関数**、**実行前チェック関数**を受け取り、ルートコマンドを生成します。ロジックの複雑な結合は\*\*`createPreRunE`\*\*ヘルパー関数に分離されています。
 
-### `Execute` 関数
+C## `Execute` 関数
 
 CLIアプリケーションのエントリポイントとして機能し、全てのカスタマイズ関数をルートコマンドに渡し、`rootCmd.Execute()`を呼び出します。エラー処理は`os.Exit(1)`のみです。
 
 -----
 
-## 📜 ライセンス (License)
+### 📜 ライセンス (License)
 
 このプロジェクトは [MIT License](https://opensource.org/licenses/MIT) の下で公開されています。
 
