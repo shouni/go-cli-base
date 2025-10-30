@@ -1,4 +1,4 @@
-module github.com/shouni/go-cli-base v1.0.0
+module github.com/shouni/go-cli-base
 
 go 1.22
 
