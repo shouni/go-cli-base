@@ -10,7 +10,7 @@ import (
 // GlobalFlags は、すべてのコマンドで利用できる共通フラグを保持する構造体です。
 // アプリケーション側から clibase.Flags.Verbose のようにアクセスできます。
 type GlobalFlags struct {
-	Verbose    bool
+	Verbose    bool
 	ConfigFile string
 }
 
@@ -26,29 +26,30 @@ type CustomPreRunEFunc func(cmd *cobra.Command, args []string) error
 // アプリケーション固有のフラグ追加や、PersistentPreRunE のロジックを注入できます。
 func NewRootCmd(appName string, addFlags CustomFlagFunc, preRunE CustomPreRunEFunc) *cobra.Command {
 	rootCmd := &cobra.Command{
-		Use:   appName,
+		// コロン(:)の前後も含め、全角スペース・U+00A0を排除
+		Use:   appName,
 		Short: fmt.Sprintf("A CLI tool for %s.", appName),
-		Long:  fmt.Sprintf("The CLI tool for %s. Use a subcommand to perform a task.", appName),
+		Long:  fmt.Sprintf("The CLI tool for %s. Use a subcommand to perform a task.", appName),
 
 		// PersistentPreRunE: 全てのコマンド実行前に共通して行いたい処理を定義
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		// 1. clibase 共通の PersistentPreRun 処理
-		if Flags.Verbose {
-		// ロギングライブラリの初期化などをここで行う
-		fmt.Println("Verbose mode enabled by clibase.")
-	}
-		// 設定ファイル読み込みロジックなどをここに記述
+			// 1. clibase 共通の PersistentPreRun 処理
+			if Flags.Verbose {
+				// ロギングライブラリの初期化などをここで行う
+				fmt.Println("Verbose mode enabled by clibase.")
+			}
+			// 設定ファイル読み込みロジックなどをここに記述
 
-		// 2. アプリケーション固有の PersistentPreRunE 処理を実行
-		if preRunE != nil {
-		return preRunE(cmd, args)
-	}
-		return nil
-	},
-		// Run は通常、Help表示などに利用されます
+			// 2. アプリケーション固有の PersistentPreRunE 処理を実行
+			if preRunE != nil {
+				return preRunE(cmd, args)
+			}
+			return nil
+		},
+		// コロン(:)の前後も含め、全角スペース・U+00A0を排除
 		Run: func(cmd *cobra.Command, args []string) {
-		cmd.Help()
-	},
+			cmd.Help()
+		},
 	}
 
 	// 共通フラグの定義 (永続フラグとして定義することで、全てのサブコマンドで利用可能)
@@ -70,9 +71,7 @@ func Execute(appName string, addFlags CustomFlagFunc, preRunE CustomPreRunEFunc,
 	rootCmd.AddCommand(cmds...)
 
 	if err := rootCmd.Execute(); err != nil {
-		// Execute()でエラーが発生した場合、cobraは既にエラーを出力しているため
-		// os.Exit(1) のみで良いが、念のため fmt.Println(err) を残す
-		fmt.Println(err)
+		// cobraがエラーを出力するため、os.Exit(1)のみ
 		os.Exit(1)
 	}
 }
