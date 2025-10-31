@@ -61,8 +61,8 @@ func NewRootCmd(appName string, addFlags CustomFlagFunc, preRunE CustomPreRunEFu
 	}
 
 	// 共通フラグの定義 (永続フラグとして定義することで、全てのサブコマンドで利用可能)
-	rootCmd.PersistentFlags().BoolVarP(&Flags.Verbose, "verbose", "v", false, "Enable verbose output")
-	rootCmd.PersistentFlags().StringVarP(&Flags.ConfigFile, "config", "c", "", "Config file path")
+	rootCmd.PersistentFlags().BoolVarP(&Flags.Verbose, "verbose", "V", false, "Enable verbose output")
+	rootCmd.PersistentFlags().StringVarP(&Flags.ConfigFile, "config", "C", "", "Config file path")
 
 	// アプリケーション固有のフラグを追加
 	if addFlags != nil {
@@ -79,7 +79,6 @@ func Execute(appName string, addFlags CustomFlagFunc, preRunE CustomPreRunEFunc,
 	rootCmd.AddCommand(cmds...)
 
 	if err := rootCmd.Execute(); err != nil {
-		// cobraがエラーメッセージを標準エラー出力に表示するため、ここではos.Exit(1)のみで十分です。
 		os.Exit(1)
 	}
 }
