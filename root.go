@@ -29,7 +29,6 @@ func createPreRunE(preRunE CustomPreRunEFunc) func(cmd *cobra.Command, args []st
 		if Flags.Verbose {
 			// ロギングライブラリの初期化などをここで行うことを想定しています。
 			// 例: log.SetLevel(log.DebugLevel)
-			fmt.Println("Verbose mode enabled by clibase.")
 		}
 		// 設定ファイル読み込みロジックなどをここに記述
 
